@@ -21,7 +21,7 @@ function handlebars_demo_page_menu_function() {
         'template' => 'handlebars_demo_page.tpl.hbr',
         'path' => drupal_get_path('module', 'handlebars_demo_page'),
     ));
-    drupal_add_js(drupal_get_path('module', 'handlebars_demo_page') .'/handlebars_demo_page.js','file');
+    // drupal_add_js(drupal_get_path('module', 'handlebars_demo_page') .'/handlebars_demo_page.js','file');
     return 'Simple implementation of a module that adds a page and registers a Handlebars template and JS file. The Handlebars content will load below. <div class="handlebars-content-target"></div>';
 }
 

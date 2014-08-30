@@ -38,6 +38,11 @@ class HandlebarTemplate {
    */
   private $info;
 
+  /**
+   * Related Handlebars JS file.
+   */
+  private $script;
+
   public function __construct($args = array()) {
     $this->info = (Object) $args;
   }
@@ -45,9 +50,11 @@ class HandlebarTemplate {
   /**
    * Check to see the file exists.
    */
-  public function fileCheck() {
-    if (!file_exists($this->file())) {
-      drupal_set_message(t('File !file does not exist', array('!file' => $this->file())), 'error');
+  public function fileCheck($fileToCheck) {
+    // Check bowith DRUPAL_ROOT and without as we don't need DRUPAL_ROOT for JS.
+    // ToDo: Probably a more elegant way to structure this.
+    if ( (!file_exists($fileToCheck)) && (!file_exists(DRUPAL_ROOT . '/' . fileToCheck)) )  {
+      drupal_set_message(t('File !file does not exist', array('!file' => $fileToCheck)), 'error');
       return FALSE;
     }
     return TRUE;
@@ -64,6 +71,8 @@ class HandlebarTemplate {
       }
       $loaded = TRUE;
     }
+    $this->file();
+    $this->script();
   }
 
   /**
@@ -101,11 +110,22 @@ class HandlebarTemplate {
   }
 
   /**
+   * Full file path and filename to Handlebars JS file. 
+   * Should be same name as template but with .js, i.e. handlebars_demo_page.tpl.hbr -> handlebars_demo_page.hbr.js
+   * Optional.
+   */
+  protected function script() {
+    $this->script = $this->info->path . '/' . str_replace('tpl.hbr', 'hbr.js', $this->info->template);
+
+    return $this->script;
+  }
+
+  /**
    * Get file content.
    */
   protected function content() {
     if (!$this->content) {
-      $this->content = ($this->fileCheck()) ? file_get_contents($this->file()) : '';
+      $this->content = ($this->fileCheck($this->file)) ? file_get_contents($this->file()) : '';
     }
     return $this->content;
   }
@@ -115,13 +135,17 @@ class HandlebarTemplate {
    */
   public function addTemplate(&$handlebars) {
     $this->load();
-    if ($this->fileCheck()) {
+    if ($this->fileCheck($this->file)) {
       $handlebars[$this->id()] = $this;
     }
     $setting = array('handlebars' => array(
       'inventory' => array($this->id => $this->id),
     ));
     drupal_add_js($setting, 'setting');
+
+    if ($this->fileCheck($this->script)) {
+      drupal_add_js($this->script, 'file');
+    }
   }
 
   /**
@@ -130,10 +154,10 @@ class HandlebarTemplate {
   public function render() {
     $attributes = array(
       'type' => 'text/x-handlebars-template',
-      'id' => $this->id(),
+      'id' => str_replace('.hbr','',$this->id()),
     );
 
-    $output = '<script ' . drupal_attributes($attributes) . '>';
+    $output = '<script' . drupal_attributes($attributes) . '>';
     $output .= $this->content();
     $output .= '</script>';
 
