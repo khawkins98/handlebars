@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function handlebars_demo_page_menu() {
+    $items['handlebars/demo/page'] = array(
+        'title' => 'Handlebars demo page',
+        'description' => 'Simple implementation of a module that adds a page and registers a Handlebars template and JS file.',
+        'page callback' => 'handlebars_demo_page_menu_function',
+        'access arguments' => array('access content'),
+    );  
+    return $items;
+}
+
+/*
+ * Returns custom content to Drupal
+ */
+function handlebars_demo_page_menu_function() {
+    handlebars_add_template(array(
+        'template' => 'handlebars_demo_page.hbr',
+        'path' => drupal_get_path('module', 'handlebars_demo_page'),
+    ));
+    drupal_add_js(drupal_get_path('module', 'handlebars_demo_page') .'/handlebars_demo_page.js','file');
+    return 'Simple implementation of a module that adds a page and registers a Handlebars template and JS file. The Handlebars content will load below. <div class="handlebars-content-target"></div>';
+}
+
+
+/*
+ * Implement hook_theme().
+ */
+// function handlebars_demo_page_theme() {
+//     return array(
+//         'handlebars_demo_page.hbr' => array(
+//             // file name will be custom-page.tpl.php
+//             'template' => 'custom-page',
+//         ),
+//     );
+// }
+
+/**
+ * Implements MODULE_handlebars().
+ */
+// function handlebars_demo_page_handlebars() {
+//   return array(
+//     array(
+//       'template' => 'handlebars_demo_page.hbr',
+//       'path' => drupal_get_path('module', 'handlebars_demo_page'),
+//     ),
+//   );
+// }
+

@@ -1,0 +1,10 @@
+<div class"slide">
+
+    {{#nodes}}
+        <div>{{title}}</div>
+        <div>{{{imageRendererd image}}}</div>
+        <div>{{{body}}}</div>
+        <div>{{link}}</div>
+    {{/nodes}}
+
+</div> 
