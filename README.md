@@ -26,3 +26,4 @@ Here are my plans.
 * Sample pane: Add a sample module that loads fixed or remote content as a Panels pane.
 * Reusable Handlebar helpers: Add a central way to manage Handlebar helper functions.
 * Reusable code all over: Make a way to be able to create a block, pane, or page in a easy fashion from the Drupal admin interface. Perhaps with ctools, but that may be overkill.
+  * DONE - Autodetect JS: When loading sample.tpl.hbr, module will now check for and load any sample.hbr.js in the same directory.
