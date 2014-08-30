@@ -14,7 +14,7 @@ function handlebars_process_html(&$vars) {
   
   $handlebars = handlebars_get_templates();
   foreach ($handlebars as $id => $tpl) {
-    $vars['scripts'] .= $tpl->render();
+    $vars['page_top'] .= $tpl->render();
   }
 }
 
