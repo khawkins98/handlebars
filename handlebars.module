@@ -9,7 +9,7 @@ define('HANDLEBARS_EXT', 'hbr');
  */
 function handlebars_process_html(&$vars) {
   if (empty($vars['scripts']) || !isset($vars['scripts'])) {
-    $vars['scripts'] = '';
+    $vars['page_top'] = '';
   }
   
   $handlebars = handlebars_get_templates();
