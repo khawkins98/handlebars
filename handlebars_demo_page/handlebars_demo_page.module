@@ -18,7 +18,7 @@ function handlebars_demo_page_menu() {
  */
 function handlebars_demo_page_menu_function() {
     handlebars_add_template(array(
-        'template' => 'handlebars_demo_page.hbr',
+        'template' => 'handlebars_demo_page.tpl.hbr',
         'path' => drupal_get_path('module', 'handlebars_demo_page'),
     ));
     drupal_add_js(drupal_get_path('module', 'handlebars_demo_page') .'/handlebars_demo_page.js','file');
