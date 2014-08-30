@@ -24,7 +24,14 @@ function handlebars_process_html(&$vars) {
 function handlebars_library() {
   $libraries = array();
 
-  if (($files = file_scan_directory('sites/all/libraries/handlebars', '/handlebars.*js/')) && !empty($files)) {
+  $files = file_scan_directory('sites/all/libraries/handlebars', '/handlebars.*js/', array('recurse' => FALSE));
+
+  // If we didn't get it, check for a multi-site library
+  if ((!$files) || !empty($files)) {
+    $files = file_scan_directory(str_replace('private/temp', '', variable_get('file_temporary_path', NULL)).'/libraries/handlebars', '/handlebars.*js/', array('recurse' => FALSE));
+  }
+
+  if (($files) && !empty($files)) {
     $file = reset($files);
     $version = '1.3.0';
     preg_match('/handlebars-v(.*)/', $file->name, $matches);
