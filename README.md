@@ -22,7 +22,7 @@ To do
 Here are my plans.
 
 * DONE - Sample page: Add a sample module that loads fixed or remote content to a Drupal page.
-* Sample block: Add a sample module that loads fixed or remote content as a Drupal block.
+* DONE - Sample block: Add a sample module that loads fixed or remote content as a Drupal block.
 * Sample pane: Add a sample module that loads fixed or remote content as a Panels pane.
 * Reusable Handlebar helpers: Add a central way to manage Handlebar helper functions.
 * Reusable code all over: Make a way to be able to create a block, pane, or page in a easy fashion from the Drupal admin interface. Perhaps with ctools, but that may be overkill.

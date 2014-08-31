@@ -1,0 +1,151 @@
+<?php
+
+/**
+ * Implements hook_block_info().
+ *
+ * This hook declares what blocks are provided by the module.
+ */
+function handlebars_demo_block_block_info() {
+    // This hook returns an array, each component of which is an array of block
+    // information. The array keys are the 'delta' values used in other block
+    // hooks.
+    //
+    // The required block information is a block description, which is shown
+    // to the site administrator in the list of possible blocks. You can also
+    // provide initial settings for block weight, status, etc.
+    //
+    // Many options are defined in hook_block_info():
+    $blocks['handlebars_block_text'] = array(
+        'info' => t('Handlebars demo block'),
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    return $blocks;
+}
+
+/**
+* Implements hook_block_configure().
+*
+* This hook declares configuration options for blocks provided by this module.
+*/
+function handlebars_demo_block_block_configure($delta = '') {
+    $form = array();
+    if ($delta == 'handlebars_block_text') {
+        $form['handlebars_demo_block_string'] = array(
+            '#type' => 'textfield',
+            '#title' => t('Loading message'),
+            '#size' => 60,
+            '#description' => t('Set any loading message you like.'),
+            '#default_value' => variable_get('handlebars_demo_block_string', t('Loading, please wait...')),
+        );
+    }
+    return $form;
+}
+
+/**
+* Implements hook_block_save().
+*
+* This hook declares how the configured options for a block
+* provided by this module are saved.
+*/
+function handlebars_demo_block_block_save($delta = '', $edit = array()) {
+    if ($delta == 'handlebars_block_text') {
+        variable_set('handlebars_demo_block_string', $edit['handlebars_demo_block_string']);
+    }
+}
+
+/**
+* Implements hook_block_view().
+*
+* This hook generates the contents of the blocks themselves.
+*/
+function handlebars_demo_block_block_view($delta = '') {
+    // The $delta parameter tells us which block is being requested.
+    switch ($delta) {
+        case 'handlebars_block_text':
+            $block['subject'] = t('Handlebars Demo Block');
+            $block['content'] = handlebars_demo_block_contents($delta);
+
+            handlebars_add_template(array(
+                'template' => 'handlebars_demo_block.tpl.hbr',
+                'path' => drupal_get_path('module', 'handlebars_demo_block'),
+            ));
+
+            break;
+    }
+    return $block;
+}
+/**
+* A module-defined block content function.
+*/
+function handlebars_demo_block_contents($which_block) {
+    switch ($which_block) {
+        case 'handlebars_block_text':
+            $rendered = 'Simple implementation of a module that adds a page and registers a Handlebars template' 
+                        . '(JS file is detected automatically) and allows for display as a block. The Handlebars '
+                        . ' content will load below. <div class="handlebars-content-target">' 
+                        . variable_get('handlebars_demo_block_string', 'A default value.') 
+                        . '</div>';
+            $result = $rendered;
+            return $result;
+    }
+}
+
+/*
+* The following hooks can be used to alter blocks
+* provided by your own or other modules.
+*/
+/**
+* Implements hook_block_list_alter().
+*
+* This hook allows you to add, remove or modify blocks in the block list. The
+* block list contains the block definitions. This example requires
+* search module and the search block enabled
+* to see how this hook implementation works.
+*
+* You may also be interested in hook_block_info_alter(), which allows changes
+* to the behavior of blocks.
+*/
+function handlebars_demo_block_block_list_alter(&$blocks) {
+    // We are going to make the search block sticky on bottom of regions. For
+    // this example, we will modify the block list and append the search block at
+    // the end of the list, so even if the administrator configures the block to
+    // be on the top of the region, it will demote to bottom again.
+    foreach ($blocks as $bid => $block) {
+        if (($block->module == 'search') && ($block->delta == 'form')) {
+            // Remove the block from the list and append to the end.
+            unset($blocks[$bid]);
+            $blocks[$bid] = $block;
+            break;
+        }
+    }
+}
+
+/**
+* Implements hook_block_view_alter().
+*
+* This hook allows you to modify the output of any block in the system.
+*
+* In addition, instead of hook_block_view_alter(), which is called for all
+* blocks, you can also use hook_block_view_MODULE_DELTA_alter() to alter a
+* specific block. To change only our block using
+* hook_block_view_MODULE_DELTA_alter, we would use the function:
+* handlebars_demo_block_block_view_handlebars_demo_block_example_configurable_text_alter()
+*
+* We are going to uppercase the subject (the title of the block as shown to the
+* user) of any block if the string "uppercase" appears in the block title or
+* subject. Default block titles are set programmatically in the subject key;
+* titles created through the UI are saved in the title key. This module creates
+* an example block to demonstrate this effect (default title set
+* programmatically as subject). You can also demonstrate the effect of this
+* hook by creating a new block whose title has the string 'uppercase' in it
+* (set as title through the UI).
+*/
+function handlebars_demo_block_block_view_alter(&$data, $block) {
+    // We'll search for the string 'uppercase'.
+    if ((!empty($block->title) && stristr($block->title, 'uppercase')) || (!empty($data['subject']) && stristr($data['subject'], 'uppercase'))) {
+        // This will uppercase the default title.
+        $data['subject'] = isset($data['subject']) ? drupal_strtoupper($data['subject']) : '';
+        // This will uppercase a title set in the UI.
+        $block->title = isset($block->title) ? drupal_strtoupper($block->title) : '';
+    }
+} 

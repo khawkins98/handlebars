@@ -1,0 +1,6 @@
+name = Handlebars Sample Block
+description = Load sample template and data as a block available to Drupal.
+package = Semantic templates
+core = 7.x
+
+dependencies[] = handlebars
