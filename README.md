@@ -16,6 +16,44 @@ Instructions
 3. Enable this module.
 4. Do code stuff or check out the sample module.
 
+Usage
+-----
+
+To use this module you'll want to already be familiar with Handlebars (or at least semantic templating), and writing / adapting a custom drupal module.
+
+The general flow is this:
+1) Identify where you want to use Handlebars
+2) Make your code template as a .tpl.hbr file (see example modules)
+3) Make JS to pair (for a .hbr.js example, see example modules)
+4) Create your data source, wether it's hard-coded JSON, with the Services Views module, or Backbone
+4) Load that code into your document, ideally with a custom module (see examples), but you could probably just run the PHP function from anywhere; here are available methods:
+
+```php
+handlebars_add_template(array(
+  'template' => [file name],
+  'path' => drupal_get_path('module', '[module name]'),
+));
+```
+
+```php
+$form['element']['#attached']['hbr'] = (
+  'template' => [file name],
+  'path' => drupal_get_path('module', '[module name]'),
+);
+```
+
+```php
+function modulename_handlebars() {
+  return array(
+    array(
+      'template' => [file name],
+      'path' => drupal_get_path('module', '[module name]'),
+    ),
+  );
+}
+```
+
+
 To do
 -----
 
