@@ -131,6 +131,19 @@ class HandlebarTemplate {
   }
 
   /**
+   * Register helper functions needed for this template.
+   */
+  protected function registerHelpers() {
+    $js = '';
+    if (!empty($this->info->helpers)) {
+      foreach ($this->info->helpers as $id => $helper) {
+        $js .= "Handlebars.registerHelper(\"$id\", $helper);\r\n";
+      }
+      drupal_add_js($js, 'inline');
+    }
+  }
+
+  /**
    * Main function: adds current template file to registry.
    */
   public function addTemplate(&$handlebars) {
@@ -146,6 +159,7 @@ class HandlebarTemplate {
     if ($this->fileCheck($this->script)) {
       drupal_add_js($this->script, 'file');
     }
+    $this->registerHelpers();
   }
 
   /**

@@ -107,9 +107,10 @@ function handlebars_get_templates() {
  *
  * @see drupal_process_attached().
  */
-function hbr($path, $template) {
+function hbr($path, $template, $helpers = array()) {
   handlebars_add_template(array(
     'path' => $path,
     'template' => $template,
+    'helpers' => $helpers,
   ));
 }
