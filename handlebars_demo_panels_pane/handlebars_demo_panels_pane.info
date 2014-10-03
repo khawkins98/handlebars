@@ -1,0 +1,8 @@
+name = Handlebars Sample Panel Pane
+description = Load sample template and data as a Panels Pane.
+package = Semantic templates
+core = 7.x
+
+configure = handlebars/demo/page
+dependencies[] = handlebars
+dependencies[] = panels
