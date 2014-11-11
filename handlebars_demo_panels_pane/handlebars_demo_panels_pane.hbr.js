@@ -1,6 +1,11 @@
 (function ($) {
 
-    $(document).ready(function(){
+    // Load the Handlebars content once the page is rendered
+    $(window).load(function(){
+    
+    // Altenativley you can use the .ready below.
+    // .load invokes the functionality after the DOM is rendered to the user
+    // $(document).ready(function(){
 
         /**
          *  Reference the template.
